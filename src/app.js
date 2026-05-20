@@ -1,7 +1,7 @@
 import express from "express";
 import helmet from "helmet";
 import morgan from "morgan";
-import corsMiddleware from "./config/cors.js";
+import corsMiddleware from "./config/CORS.js";
 
 import authRoutes from "./routes/auth.routes.js";
 import productRoutes from "./routes/product.routes.js";
