@@ -159,9 +159,16 @@ export const uploadProfileImage = async (req, res) => {
       }
     );
 
-    const user = await User.findById(req.user._id);
+    // ✅ FIXED USER FETCH
+    const user = await User.findById(req.user.id);
 
-    // ✅ SAVE IN avatar STRUCTURE (IMPORTANT)
+    if (!user) {
+      return res.status(404).json({
+        message: "User not found",
+      });
+    }
+
+    // ✅ SAVE AVATAR
     user.avatar = {
       public_id: result.public_id,
       url: result.secure_url,
@@ -169,19 +176,20 @@ export const uploadProfileImage = async (req, res) => {
 
     await user.save();
 
-    // ✅ RETURN CORRECT FORMAT
+    // ✅ RETURN UPDATED AVATAR
     res.status(200).json({
       success: true,
       avatar: user.avatar,
     });
 
   } catch (error) {
+    console.log(error);
+
     res.status(500).json({
       message: error.message,
     });
   }
 };
-
 // 👤 Get Profile
 export const getProfile = async (req, res) => {
   try {
